@@ -17,7 +17,6 @@ type NumberValue = ValueDefinition<NumberConstructor>;
 type BooleanValue = ValueDefinition<BooleanConstructor>;
 
 type BaseArgument = {
-  action: () => void;
   help?: string;
 };
 
