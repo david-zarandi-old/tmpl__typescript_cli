@@ -45,8 +45,6 @@ export type ArgumentDeclarations = Record<
     )
 >;
 
-export type ParsedArgs<T extends string> = Record<T, ReturnType<Constructors>>;
-
 export function argumentParser<
   TArgDeclarations extends ArgumentDeclarations,
   TArgs extends {
