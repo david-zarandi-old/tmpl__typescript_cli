@@ -49,7 +49,7 @@ export type ParsedArgs<T extends string> = Record<T, ReturnType<Constructors>>;
 
 export function argumentParser<
   TArgDeclarations extends ArgumentDeclarations,
-  TArgs = {
+  TArgs extends {
     [P in keyof TArgDeclarations]: ReturnType<TArgDeclarations[P]["valueOf"]>;
   },
 >(_argumentDeclarations: TArgDeclarations) {
