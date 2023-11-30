@@ -16,10 +16,6 @@ type StringValue = ValueDefinition<StringConstructor>;
 type NumberValue = ValueDefinition<NumberConstructor>;
 type BooleanValue = ValueDefinition<BooleanConstructor>;
 
-type BaseArgument = {
-  help?: string;
-};
-
 type PositionalArgument = {
   typeOf: "positional";
   isRequired: true;
@@ -27,7 +23,6 @@ type PositionalArgument = {
 
 type FlagArgument = {
   typeOf: "flag";
-  short: `-${string}`;
 } & ({ short: `-${string}` } | { long: `--${string}` });
 
 type KeyValueArgument = {
@@ -36,18 +31,17 @@ type KeyValueArgument = {
 
 export type ArgumentDeclarations = Record<
   string,
-  BaseArgument &
-    (
-      | (FlagArgument & OptionalValue<BooleanConstructor>)
-      | (PositionalArgument & (StringValue | NumberValue | BooleanValue))
-      | (KeyValueArgument & (StringValue | NumberValue | BooleanValue))
-    )
+  | (FlagArgument & OptionalValue<BooleanConstructor>)
+  | (PositionalArgument & (StringValue | NumberValue | BooleanValue))
+  | (KeyValueArgument & (StringValue | NumberValue | BooleanValue))
 >;
 
 export function argumentParser<
   TArgDeclarations extends ArgumentDeclarations,
   TArgs extends {
-    [P in keyof TArgDeclarations]: ReturnType<TArgDeclarations[P]["valueOf"]>;
+    [P in keyof TArgDeclarations]: Array<
+      ReturnType<TArgDeclarations[P]["valueOf"]>
+    >;
   },
 >(_argumentDeclarations: TArgDeclarations) {
   function parse(_args = process.argv.slice(2)) {
