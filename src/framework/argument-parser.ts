@@ -1,6 +1,6 @@
 type Constructors = StringConstructor | NumberConstructor | BooleanConstructor;
 
-type ValueOf<T extends Constructors> = { value: T };
+type ValueOf<T extends Constructors> = { valueOf: T };
 
 type RequiredValue<T extends Constructors> = ValueOf<T> & { isRequired: true };
 type OptionalValue<T extends Constructors> = ValueOf<T> & {
@@ -45,14 +45,16 @@ export type ArgumentDeclarations = Record<
     )
 >;
 
-export type ParsedArgs<T = ArgumentDeclarations> = Record<
-  keyof T,
-  ReturnType<Constructors>
->;
+export type ParsedArgs<T extends string> = Record<T, ReturnType<Constructors>>;
 
-export function argumentParser(argumentDeclarations: ArgumentDeclarations) {
-  function parse(args = process.argv.slice(2)) {
-    const processedArgs: ParsedArgs<typeof argumentDeclarations> = {};
+export function argumentParser<
+  TArgDeclarations extends ArgumentDeclarations,
+  TArgs = {
+    [P in keyof TArgDeclarations]: ReturnType<TArgDeclarations[P]["valueOf"]>;
+  },
+>(_argumentDeclarations: TArgDeclarations) {
+  function parse(_args = process.argv.slice(2)) {
+    const processedArgs: TArgs = {} as TArgs;
     return processedArgs;
   }
 
