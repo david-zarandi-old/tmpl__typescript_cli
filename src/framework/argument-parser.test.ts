@@ -1,6 +1,6 @@
 import * as assert from "node:assert";
 import { afterEach, describe, it } from "node:test";
-import { ArgumentDeclarations, argumentParser } from "./argument-parser";
+import { argumentParser } from "./argument-parser";
 
 describe("ArgumentParser", () => {
   const originalArgs: string[] = process.argv;
@@ -183,7 +183,7 @@ describe("ArgumentParser", () => {
 
       it("should parse number argument", () => {
         process.argv = ["node", "foo", "-f", "42", "--foo", "43"];
-        const argumentDeclarations: ArgumentDeclarations = {
+        const argumentDeclarations = {
           foo: {
             typeOf: "key-value",
             short: "-f",
@@ -199,7 +199,7 @@ describe("ArgumentParser", () => {
 
       it("should parse boolean argument", () => {
         process.argv = ["node", "foo", "-f", "true", "--foo", "false"];
-        const argumentDeclarations: ArgumentDeclarations = {
+        const argumentDeclarations = {
           foo: {
             typeOf: "key-value",
             short: "-f",
@@ -222,7 +222,6 @@ describe("ArgumentParser", () => {
         const argumentDeclarations = {
           foo: {
             typeOf: "positional",
-            isRequired: true,
             valueOf: String,
           },
         } as const;
@@ -236,7 +235,6 @@ describe("ArgumentParser", () => {
         const argumentDeclarations = {
           foo: {
             typeOf: "positional",
-            isRequired: true,
             valueOf: Number,
           },
         } as const;
@@ -250,7 +248,6 @@ describe("ArgumentParser", () => {
         const argumentDeclarations = {
           foo: {
             typeOf: "positional",
-            isRequired: true,
             valueOf: Boolean,
           },
         } as const;
@@ -264,7 +261,6 @@ describe("ArgumentParser", () => {
         const argumentDeclarations = {
           foo: {
             typeOf: "positional",
-            isRequired: true,
             valueOf: Boolean,
           },
         } as const;
@@ -280,7 +276,6 @@ describe("ArgumentParser", () => {
         const argumentDeclarations = {
           foo: {
             typeOf: "positional",
-            isRequired: true,
             valueOf: String,
           },
         } as const;
@@ -294,7 +289,6 @@ describe("ArgumentParser", () => {
         const argumentDeclarations = {
           foo: {
             typeOf: "positional",
-            isRequired: true,
             valueOf: Number,
           },
         } as const;
@@ -308,7 +302,6 @@ describe("ArgumentParser", () => {
         const argumentDeclarations = {
           foo: {
             typeOf: "positional",
-            isRequired: true,
             valueOf: Boolean,
           },
         } as const;
@@ -327,7 +320,6 @@ describe("ArgumentParser", () => {
           foo: {
             typeOf: "flag",
             long: "--foo",
-            isRequired: false,
             valueOf: Boolean,
           },
         } as const;
@@ -342,7 +334,6 @@ describe("ArgumentParser", () => {
           foo: {
             typeOf: "flag",
             long: "--foo",
-            isRequired: false,
             valueOf: Boolean,
           },
         } as const;
@@ -359,7 +350,6 @@ describe("ArgumentParser", () => {
           foo: {
             typeOf: "flag",
             short: "-f",
-            isRequired: false,
             valueOf: Boolean,
           },
         } as const;
@@ -374,7 +364,6 @@ describe("ArgumentParser", () => {
           foo: {
             typeOf: "flag",
             short: "-f",
-            isRequired: false,
             valueOf: Boolean,
           },
         } as const;
@@ -392,7 +381,6 @@ describe("ArgumentParser", () => {
             typeOf: "flag",
             short: "-f",
             long: "--foo",
-            isRequired: false,
             valueOf: Boolean,
           },
         } as const;
@@ -408,7 +396,6 @@ describe("ArgumentParser", () => {
             typeOf: "flag",
             short: "-f",
             long: "--foo",
-            isRequired: false,
             valueOf: Boolean,
           },
         } as const;
