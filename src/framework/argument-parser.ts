@@ -1,39 +1,42 @@
 type Constructors = StringConstructor | NumberConstructor | BooleanConstructor;
 
-type ValueOf<T extends Constructors> = { valueOf: T };
+type ValueOf<T extends Constructors = Constructors> = { valueOf: T };
 
-type RequiredValue<T extends Constructors> = ValueOf<T> & { isRequired: true };
+type RequiredValue<T extends Constructors> = ValueOf<T> & { isRequired?: true };
 type OptionalValue<T extends Constructors> = ValueOf<T> & {
-  isRequired: false;
+  isRequired?: false;
   defaultValue?: ReturnType<T>;
 };
 
-type ValueDefinition<T extends Constructors> =
-  | RequiredValue<T>
-  | OptionalValue<T>;
+type FlagDeclaration =
+  | { short: `-${string}`; long?: `--${string}` }
+  | { long: `--${string}`; short?: `-${string}` };
 
-type StringValue = ValueDefinition<StringConstructor>;
-type NumberValue = ValueDefinition<NumberConstructor>;
-type BooleanValue = ValueDefinition<BooleanConstructor>;
-
-type PositionalArgument = {
+type BasePositionalArgument = {
   typeOf: "positional";
-  isRequired: true;
 };
 
-type FlagArgument = {
+type BaseFlagArgument = {
   typeOf: "flag";
-} & ({ short: `-${string}` } | { long: `--${string}` });
+};
 
-type KeyValueArgument = {
+type BaseKeyValueArgument = {
   typeOf: "key-value";
-} & ({ short: `-${string}` } | { long: `--${string}` });
+};
+
+type PositionalArgument = BasePositionalArgument & RequiredValue<Constructors>;
+
+type FlagArgument = BaseFlagArgument &
+  OptionalValue<BooleanConstructor> &
+  FlagDeclaration;
+
+type KeyValueArgument = BaseKeyValueArgument &
+  (RequiredValue<Constructors> | OptionalValue<Constructors>) &
+  FlagDeclaration;
 
 export type ArgumentDeclarations = Record<
   string,
-  | (FlagArgument & OptionalValue<BooleanConstructor>)
-  | (PositionalArgument & (StringValue | NumberValue | BooleanValue))
-  | (KeyValueArgument & (StringValue | NumberValue | BooleanValue))
+  PositionalArgument | FlagArgument | KeyValueArgument
 >;
 
 export function argumentParser<
